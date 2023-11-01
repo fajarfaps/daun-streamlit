@@ -9,6 +9,7 @@ import numpy as np
 from keras.models import load_model
 from keras.preprocessing import image
 from tkinter import Tk, filedialog
+import pickle
 
 # Muat model-model
 model1 = load_model('C:\\Users\\fajar\\savemodel_daun.h5')
