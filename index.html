@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Klasifikasi Gambar</title>
+</head>
+<body>
+    <h1>Klasifikasi Gambar</h1>
+
+    <form id="imageForm" action="/classify" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept=".png, .jpg, .jpeg" id="imageInput">
+        <input type="submit" value="Klasifikasikan">
+    </form>
+
+    <h2>Hasil Klasifikasi</h2>
+    <p>Label: <span id="classLabel"></span></p>
+    <p>Skor Kepercayaan: <span id="confidenceScore"></span></p>
+
+    <img id="resultImage" src="" style="display: none; width: 800px; height: 800px;">
+
+    <script type="text/javascript">
+        document.getElementById('imageForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('/classify', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('classLabel').textContent = result.class_label;
+                document.getElementById('confidenceScore').textContent = (result.confidence_score * 100).toFixed(2) + "%";
+                document.getElementById('resultImage').src = "data:image/jpeg;base64, " + result.image;
+                document.getElementById('resultImage').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
